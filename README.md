@@ -27,7 +27,7 @@ Wholesale electricity prices in U.S. power markets are highly volatile across ti
 ---
 
 ## Dataset
-This project uses the **Electricity Market Data (United States)** dataset from Kaggle, which includes time-series electricity market data for **PJM** and **MISO**. The dataset contains 5 years of data in 15-minute intervals and includes pricing and operational variables used to study market behavior. :contentReference[oaicite:1]{index=1}
+This project uses the **Electricity Market Data (United States)** dataset from Kaggle, which includes time-series electricity market data for **PJM** and **MISO**. The dataset contains 5 years of data in 15-minute intervals and includes pricing and operational variables used to study market behavior.
 
 ### Data Source
 - **Kaggle:** *Electricity Market Data (United States)*
@@ -45,7 +45,7 @@ The dataset includes variables related to:
 - On-peak vs off-peak indicators
 - Weekday vs weekend structure
 
-These features allow for both market comparison and operational analysis of price volatility. :contentReference[oaicite:2]{index=2}
+These features allow for both market comparison and operational analysis of price volatility.
 
 ---
 
@@ -97,7 +97,7 @@ After cleaning, the data was loaded into MySQL for structured analysis. SQL quer
 - Do ramp imports and exports signal price stress?
 - How do real-time prices compare to day-ahead prices?
 
-The SQL workflow for this project is documented in `market.sql`. :contentReference[oaicite:3]{index=3}
+The SQL workflow for this project is documented in `market.sql`.
 
 ### 5. Power BI Dashboard
 A Power BI dashboard was built to present the analysis in an interactive and business-friendly format. The dashboard allows users to monitor:
