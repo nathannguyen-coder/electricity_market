@@ -6,23 +6,23 @@ This project analyzes wholesale electricity price volatility across two major U.
 The goal of the project is to help market participants understand:
 - when and where electricity prices spike,
 - how volatility differs between PJM and MISO,
-- which operational factors are associated with higher prices, and
-- how these patterns can support better market monitoring and decision-making.
+- which operational factors are associated with higher prices,
+- and how these patterns can support better market monitoring, forecasting, and decision-making.
 
 This end-to-end analytics project includes:
 - loading and exploring the dataset in Python,
 - cleaning and preparing the data,
 - querying the data in MySQL,
 - building an interactive Power BI dashboard,
-- and summarizing insights in a final report.
+- and developing a machine learning model to forecast electricity prices.
 
 ---
 
 ## Business Problem
-Wholesale electricity prices in U.S. power markets are highly volatile across time and locations. Market participants need a way to identify when and where prices spike, understand the operational patterns behind that volatility, and monitor differences between major markets such as PJM and MISO.
+Wholesale electricity prices in U.S. power markets are highly volatile across time and locations. Market participants need a way to identify when and where prices spike, understand the operational patterns behind that volatility, and anticipate future price movements across major markets such as PJM and MISO.
 
 ### Core Analytics Question
-**How do electricity prices vary by market, time of day, season, and location, and what patterns could help market participants better monitor volatility and make market decisions?**
+**How do electricity prices vary by market, time of day, season, and system conditions, and how can historical market data be used to better monitor and predict price volatility?**
 
 ---
 
@@ -38,20 +38,24 @@ This project uses the **Electricity Market Data (United States)** dataset from K
 The dataset includes variables related to:
 - Real-time LMP prices
 - Day-ahead LMP prices
-- Load levels
+- Congestion values
+- Load levels and load forecasts
 - Generation mix (gas, coal, nuclear, hydro)
 - Ramp imports and exports
+- ACE and net load indicators
 - Date and time fields
 - On-peak vs off-peak indicators
 - Weekday vs weekend structure
 
-These features allow for both market comparison and operational analysis of price volatility.
+These features allow for market comparison, operational analysis, and time-series forecasting of price volatility.
 
 ---
 
 ## Tools Used
-- **Python** — data loading, exploratory data analysis (EDA), and cleaning
-- **Pandas / NumPy / Matplotlib / Seaborn** — data manipulation and visualization
+- **Python** — data loading, exploratory data analysis, cleaning, and forecasting
+- **Pandas / NumPy / Matplotlib** — data manipulation and visualization
+- **scikit-learn** — preprocessing pipeline, imputation, and model evaluation
+- **XGBoost** — gradient boosting model for electricity price forecasting
 - **MySQL** — structured querying and business analysis
 - **Power BI** — interactive dashboard creation
 - **Jupyter Notebook** — workflow documentation and analysis
@@ -74,16 +78,17 @@ EDA was performed to identify major pricing trends and data quality issues. Key 
 - average price differences between PJM and MISO,
 - volatility of each market,
 - hourly price patterns,
-- seasonal patterns,
-- and relationships between price and system load or generation variables.
+- seasonal trends,
+- and relationships between price and system load, generation, and congestion variables.
 
 ### 3. Data Cleaning
-The dataset was cleaned to improve consistency and usability for SQL and dashboard analysis. Cleaning steps included:
+The dataset was cleaned to improve consistency and usability for SQL, dashboard, and machine learning analysis. Cleaning steps included:
 - converting date/time fields into usable datetime format,
 - handling missing values,
-- standardizing numeric columns,
-- removing formatting issues such as commas in numeric fields,
-- and preparing fields for time-based grouping.
+- removing commas and formatting issues in numeric fields,
+- standardizing column names,
+- converting categorical indicators where needed,
+- and preparing features for time-based grouping and modeling.
 
 ### 4. SQL Analysis in MySQL
 After cleaning, the data was loaded into MySQL for structured analysis. SQL queries were used to answer business-focused questions such as:
@@ -99,7 +104,28 @@ After cleaning, the data was loaded into MySQL for structured analysis. SQL quer
 
 The SQL workflow for this project is documented in `market.sql`.
 
-### 5. Power BI Dashboard
+### 5. Machine Learning Forecasting
+To extend the descriptive analysis, I built a **24-hour-ahead electricity price forecasting model** for:
+- **PJM real-time LMP**
+- **MISO real-time LMP**
+
+The modeling workflow included:
+- generating **time-based features** such as hour, day of week, and month,
+- encoding cyclical patterns using **sine/cosine transformations**,
+- creating **lag features** (1, 2, 3, 6, 12, and 24 intervals),
+- building **rolling mean** and **rolling standard deviation** features,
+- and using an **80/20 time-based train-test split** to preserve chronological order.
+
+The primary model used was **XGBoost Regressor**, implemented with a preprocessing pipeline that included **median imputation** for missing values. A **Random Forest Regressor** was included as a fallback if XGBoost was unavailable.
+
+Model performance was evaluated using:
+- **RMSE**
+- **MAE**
+- **R²**
+
+This forecasting component adds a predictive layer to the project by showing how historical market and operational data can be used to estimate future price behavior.
+
+### 6. Power BI Dashboard
 A Power BI dashboard was built to present the analysis in an interactive and business-friendly format. The dashboard allows users to monitor:
 - market-level price differences,
 - hourly and monthly trends,
@@ -107,7 +133,7 @@ A Power BI dashboard was built to present the analysis in an interactive and bus
 - operational drivers such as load and generation,
 - and price stress indicators.
 
-### 6. Final Report
+### 7. Final Report
 A final report was created to summarize the business problem, methodology, key findings, and recommendations. This report translates technical analysis into practical takeaways for market participants.
 
 ---
@@ -140,20 +166,20 @@ The Power BI dashboard is designed to answer the core business question through 
 ---
 
 ## Key Results
-Some of the main findings from the SQL analysis include:
+Some of the main findings from the analysis include:
 - **PJM had a slightly higher average real-time price** than MISO.
 - **PJM also showed higher price volatility**, suggesting larger price swings.
 - Electricity prices varied significantly by **hour of day**, supporting the importance of intraday monitoring.
 - **On-peak periods** tended to be more expensive than off-peak periods.
 - Seasonal patterns showed that some times of year were both **more expensive and more volatile** than others.
-- Operational variables such as **load, gas generation, and ramp activity** were useful for understanding price stress conditions.
-- Comparing **real-time vs day-ahead prices** helped highlight periods where actual conditions differed from expected market conditions.
+- Operational variables such as **load, congestion, generation mix, and ramp activity** were useful for understanding price stress conditions.
+- The forecasting model demonstrated that historical time-series and operational features can be used to predict **24-hour-ahead real-time prices** for both PJM and MISO.
 
 ---
 
 ## Repository Structure
 ```bash
-├── Electricity_Market_US_Project_fixed.ipynb   # Python data loading, EDA, and cleaning
+├── Electricity_Market_US_Project_FINAL.ipynb   # Python data loading, EDA, cleaning, and ML forecasting
 ├── market.sql                                  # MySQL queries for business analysis
 ├── Market.pbix                                 # Power BI dashboard
 ├── README.md                                   # Project documentation
