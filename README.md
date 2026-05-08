@@ -32,7 +32,7 @@ This project uses the **Electricity Market Data (United States)** dataset from K
 ### Data Source
 - **Kaggle:** *Electricity Market Data (United States)*
 - **Author:** jaredandreatta
-- **Link:** add your Kaggle dataset URL here
+- **Link:** https://www.kaggle.com/datasets/jaredandreatta/pjm-and-miso-electricity-market-data
 
 ### Included Variables
 The dataset includes variables related to:
